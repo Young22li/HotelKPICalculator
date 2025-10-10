@@ -1,1 +1,254 @@
-<h1>Hello world <h1/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel KPI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .output-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .kpi-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .kpi-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .kpi-value.currency {
+            color: #2ecc71;
+        }
+
+        .kpi-value.percentage {
+            color: #667eea;
+        }
+
+        .error-text {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .kpi-value {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏨 Hotel KPI Calculator</h1>
+        <p class="subtitle">Calculate your hotel's key performance indicators</p>
+
+        <div class="input-section">
+            <h2 class="section-title">Core Inputs</h2>
+            
+            <div class="input-group">
+                <label for="totalRooms">Total Rooms Available</label>
+                <input type="number" id="totalRooms" min="0" step="1" value="100" placeholder="Enter total rooms">
+            </div>
+
+            <div class="input-group">
+                <label for="roomsSold">Rooms Sold</label>
+                <input type="number" id="roomsSold" min="0" step="1" value="75" placeholder="Enter rooms sold">
+            </div>
+
+            <div class="input-group">
+                <label for="totalRevenue">Total Room Revenue ($)</label>
+                <input type="number" id="totalRevenue" min="0" step="0.01" value="9375.00" placeholder="Enter total revenue">
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h2 class="section-title" style="color: #764ba2; border-bottom-color: #764ba2;">Calculated KPIs</h2>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Occupancy Rate</div>
+                <div class="kpi-value percentage" id="occupancy">75.00%</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Average Daily Rate (ADR)</div>
+                <div class="kpi-value currency" id="adr">$125.00</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-label">Revenue Per Available Room (RevPAR)</div>
+                <div class="kpi-value currency" id="revpar">$93.75</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const totalRoomsInput = document.getElementById('totalRooms');
+        const roomsSoldInput = document.getElementById('roomsSold');
+        const totalRevenueInput = document.getElementById('totalRevenue');
+        
+        const occupancyOutput = document.getElementById('occupancy');
+        const adrOutput = document.getElementById('adr');
+        const revparOutput = document.getElementById('revpar');
+
+        function formatCurrency(value) {
+            return '$' + value.toFixed(2);
+        }
+
+        function formatPercentage(value) {
+            return value.toFixed(2) + '%';
+        }
+
+        function calculateKPIs() {
+            const totalRooms = parseFloat(totalRoomsInput.value) || 0;
+            const roomsSold = parseFloat(roomsSoldInput.value) || 0;
+            const totalRevenue = parseFloat(totalRevenueInput.value) || 0;
+
+            // Calculate Occupancy (%)
+            let occupancy;
+            if (totalRooms === 0) {
+                occupancyOutput.textContent = 'N/A';
+            } else {
+                occupancy = (roomsSold / totalRooms) * 100;
+                occupancyOutput.textContent = formatPercentage(occupancy);
+            }
+
+            // Calculate ADR ($)
+            if (roomsSold === 0) {
+                adrOutput.textContent = '$0.00';
+            } else {
+                const adr = totalRevenue / roomsSold;
+                adrOutput.textContent = formatCurrency(adr);
+            }
+
+            // Calculate RevPAR ($)
+            if (totalRooms === 0) {
+                revparOutput.textContent = 'N/A';
+            } else {
+                const revpar = totalRevenue / totalRooms;
+                revparOutput.textContent = formatCurrency(revpar);
+            }
+        }
+
+        // Add event listeners for real-time updates
+        totalRoomsInput.addEventListener('input', calculateKPIs);
+        roomsSoldInput.addEventListener('input', calculateKPIs);
+        totalRevenueInput.addEventListener('input', calculateKPIs);
+
+        // Initial calculation
+        calculateKPIs();
+    </script>
+</body>
+</html>
