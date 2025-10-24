@@ -19,7 +19,7 @@ function calculateKPIs() {
     const roomsSold = parseFloat(roomsSoldInput.value) || 0;
     const totalRevenue = parseFloat(totalRevenueInput.value) || 0;
 
-    if (totalRooms < roomsSold || totalRooms === 0) {
+    if (totalRooms < roomsSold || totalRooms <= 0 || roomsSold < 0 || totalRevenue < 0) {
         occupancyOutput.textContent = 'N/A';
         adrOutput.textContent = 'N/A';
         revparOutput.textContent = 'N/A';
