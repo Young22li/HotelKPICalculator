@@ -26,6 +26,12 @@ function calculateKPIs() {
     }
     else if (roomsSold === 0) {
         adrOutput.textContent = 'N/A';
+
+        occupancy = (roomsSold / totalRooms) * 100;
+        occupancyOutput.textContent = formatPercentage(occupancy);
+
+        const revpar = totalRevenue / totalRooms;
+        revparOutput.textContent = formatCurrency(revpar);
     }
     else{
         occupancy = (roomsSold / totalRooms) * 100;
