@@ -19,34 +19,21 @@ function calculateKPIs() {
     const roomsSold = parseFloat(roomsSoldInput.value) || 0;
     const totalRevenue = parseFloat(totalRevenueInput.value) || 0;
 
-    if (totalRooms < roomsSold) {
+    if (totalRooms < roomsSold || totalRooms === 0) {
         occupancyOutput.textContent = 'N/A';
         adrOutput.textContent = 'N/A';
         revparOutput.textContent = 'N/A';
-        return;
     }
-
-    // Calculate Occupancy (%)
-    let occupancy;
-    if (totalRooms === 0) {
-        occupancyOutput.textContent = 'N/A';
-    } else {
+    else if (roomsSold === 0) {
+        adrOutput.textContent = 'N/A';
+    }
+    else{
         occupancy = (roomsSold / totalRooms) * 100;
         occupancyOutput.textContent = formatPercentage(occupancy);
-    }
 
-    // Calculate ADR ($)
-    if (roomsSold === 0) {
-        adrOutput.textContent = 'N/A';
-    } else {
         const adr = totalRevenue / roomsSold;
         adrOutput.textContent = formatCurrency(adr);
-    }
 
-    // Calculate RevPAR ($)
-    if (totalRooms === 0) {
-        revparOutput.textContent = 'N/A';
-    } else {
         const revpar = totalRevenue / totalRooms;
         revparOutput.textContent = formatCurrency(revpar);
     }
