@@ -45,7 +45,7 @@ function calculateKPIs() {
     }
 }
 
-// Add event listeners for real-time updates
+// Add event listeners
 totalRoomsInput.addEventListener('input', calculateKPIs);
 roomsSoldInput.addEventListener('input', calculateKPIs);
 totalRevenueInput.addEventListener('input', calculateKPIs);
